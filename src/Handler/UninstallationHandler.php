@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oksydan\Falconize\Handler;
 
+use Doctrine\DBAL\Schema\Schema;
 use Oksydan\Falconize\Connection\ConnectionManager;
 use Oksydan\Falconize\Database\Builder\SchemaBuilder;
 use Oksydan\Falconize\Database\Collection\DatabaseQueryCollection;
