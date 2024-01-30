@@ -22,25 +22,26 @@ class UninstallationHandler implements HandlerInterface
 
     private SchemaComparator $schemaComparator;
 
-    private SchemaBuilder $schemaBuilder;
-
     private DatabaseSchemaRetriever $databaseSchemaRetriever;
 
     public function __construct(
         ConnectionManager $connectionManager,
         DatabaseQueryExecutor $databaseQueryExecutor,
         SchemaComparator $schemaComparator,
-        SchemaBuilder $schemaBuilder,
         DatabaseSchemaRetriever $databaseSchemaRetriever
     ) {
         $this->connectionManager = $connectionManager;
         $this->databaseQueryExecutor = $databaseQueryExecutor;
         $this->schemaComparator = $schemaComparator;
-        $this->schemaBuilder = $schemaBuilder;
         $this->databaseSchemaRetriever = $databaseSchemaRetriever;
     }
 
     public function handle(ParsedResult $config): void
+    {
+        $this->uninstallDatabase($config);
+    }
+
+    private function uninstallDatabase(ParsedResult $config): void
     {
         $connection = $this->connectionManager->getConnection();
         $tables = $config->getDatabaseCollection();
