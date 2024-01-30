@@ -1,0 +1,28 @@
+{
+  "name": "oksydan/falconize",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Oksydan",
+      "email": "istepien@istepien.dev"
+    }
+  ],
+  "version": "1.0.0",
+  "type": "library",
+  "description": "Falconize is a simple tool designed to help you create a database structure and register hooks in PrestaShop modules.",
+  "autoload": {
+    "psr-4": {
+      "Oksydan\\Falconize\\": "/src"
+    }
+  },
+  "php": "^7.4 || ^8.0 || ^8.1",
+  "require": {
+    "symfony/dependency-injection": "^5.0",
+    "symfony/config": "^5.0",
+    "doctrine/dbal": "^2.13",
+    "symfony/yaml": "^6.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.48"
+  }
+}

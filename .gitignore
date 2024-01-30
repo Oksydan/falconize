@@ -1,0 +1,8 @@
+### Composer ###
+/vendor/*
+
+### Tests ###
+.php-cs-fixer.cache
+
+## Misc ###
+.DS_Store

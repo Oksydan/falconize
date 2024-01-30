@@ -1,0 +1,35 @@
+services:
+  _defaults:
+    public: false
+    autowire: true
+    autoconfigure: true
+
+  Oksydan\Falconize\:
+    resource: '../src/*'
+    exclude:
+      - '../src/Container.php'
+      - '../src/Falconize.php'
+      - '../src/Handler'
+      - '../src/DTO'
+      - '../src/Exception'
+      - '../src/Connection/ConnectionManager.php'
+
+  Oksydan\Falconize\Connection\ConnectionManager:
+    class: Oksydan\Falconize\Connection\ConnectionManager
+    public: true
+
+  Oksydan\Falconize\Module\ModuleManager:
+    class: Oksydan\Falconize\Module\ModuleManager
+    public: true
+
+  Oksydan\Falconize\Helper\TableNameFormatter:
+    class: Oksydan\Falconize\Helper\TableNameFormatter
+    public: true
+
+  Oksydan\Falconize\Yaml\Parser\YamlParser:
+    class: Oksydan\Falconize\Yaml\Parser\YamlParser
+    public: true
+
+  Oksydan\Falconize\Handler\:
+    resource: '../src/Handler/*'
+    public: true
