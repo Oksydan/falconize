@@ -7,6 +7,7 @@ namespace Oksydan\Falconize\Database\Executor;
 use Oksydan\Falconize\Connection\ConnectionManager;
 use Oksydan\Falconize\Database\Collection\DatabaseQueryCollection;
 use Oksydan\Falconize\Database\DTO\DatabaseQuery;
+use Oksydan\Falconize\Exception\DatabaseQueryException;
 
 final class DatabaseQueryExecutor implements DatabaseQueryExecutorInterface
 {
@@ -21,7 +22,7 @@ final class DatabaseQueryExecutor implements DatabaseQueryExecutorInterface
     /**
      * @param DatabaseQueryCollection $queryCollection
      * @return void
-     * @throws \Exception
+     * @throws DatabaseQueryException
      */
     public function execute(DatabaseQueryCollection $queryCollection): void
     {
@@ -29,7 +30,11 @@ final class DatabaseQueryExecutor implements DatabaseQueryExecutorInterface
 
         /* @var DatabaseQuery $query */
         foreach ($queryCollection as $query) {
-            $connection->executeQuery($query->getQuery());
+            try {
+                $connection->executeQuery($query->getQuery());
+            } catch (\Exception $e) {
+                throw new DatabaseQueryException($e->getMessage());
+            }
         }
     }
 }

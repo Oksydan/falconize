@@ -10,20 +10,12 @@ services:
       - '../src/Container.php'
       - '../src/Falconize.php'
       - '../src/Handler'
-      - '../src/DTO'
+      - '../src/**/DTO'
+      - '../src/**/Collection'
       - '../src/Exception'
-      - '../src/Connection/ConnectionManager.php'
 
-  Oksydan\Falconize\Connection\ConnectionManager:
-    class: Oksydan\Falconize\Connection\ConnectionManager
-    public: true
-
-  Oksydan\Falconize\Module\ModuleManager:
-    class: Oksydan\Falconize\Module\ModuleManager
-    public: true
-
-  Oksydan\Falconize\Helper\TableNameFormatter:
-    class: Oksydan\Falconize\Helper\TableNameFormatter
+  Oksydan\Falconize\Service\PrepareConfiguration:
+    class: Oksydan\Falconize\Service\PrepareConfiguration
     public: true
 
   Oksydan\Falconize\Yaml\Parser\YamlParser:

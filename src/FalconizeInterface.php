@@ -6,9 +6,7 @@ namespace Oksydan\Falconize;
 
 interface FalconizeInterface
 {
-    public function install();
+    public function install(int $onException);
 
-    public function update();
-
-    public function uninstall();
+    public function uninstall(int $onException);
 }

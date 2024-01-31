@@ -297,7 +297,7 @@ class YamlFileException extends \Exception
     public static function invalidHookVersionCompare($hookName): self
     {
         return new self(sprintf(
-            "Invalid hook configuration, your hook: '%s' 'version_compare' must be a string",
+            "Invalid hook configuration, your hook: '%s' 'compare_operator' must be a string",
             $hookName,
         ));
     }
@@ -305,7 +305,7 @@ class YamlFileException extends \Exception
     public static function invalidHookVersionCompareValue($hookName, array $operationsList): self
     {
         return new self(sprintf(
-            "Invalid hook configuration, your hook: '%s' 'version_compare' must be a one of: %s",
+            "Invalid hook configuration, your hook: '%s' 'compare_operator' must be a one of: %s",
             $hookName,
             implode(', ', $operationsList)
         ));

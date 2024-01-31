@@ -15,5 +15,5 @@ interface FalconizeConfigurationInterface
 
     public function getDatabasePrefix(): string;
 
-    public function prestashopVersion(): string;
+    public function getPrestashopVersion(): string;
 }

@@ -9,10 +9,9 @@ use Oksydan\Falconize\Exception\YamlFileException;
 interface HookValidatorInterface
 {
     /**
-     * @param array|string $hook
-     * @param string|int $hookName
+     * @param array $hook
      * @throws YamlFileException
      * @return void
      */
-    public function validate($hook, $hookName): void;
+    public function validate($hook): void;
 }

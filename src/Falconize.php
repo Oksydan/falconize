@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace Oksydan\Falconize;
 
-use Oksydan\Falconize\Connection\ConnectionManager;
+use Oksydan\Falconize\Exception\DatabaseQueryException;
+use Oksydan\Falconize\Exception\HookRegisterException;
+use Oksydan\Falconize\Exception\HookUnregisterException;
+use Oksydan\Falconize\Exception\InstallationException;
+use Oksydan\Falconize\Exception\UninstallationException;
 use Oksydan\Falconize\Exception\YamlFileException;
 use Oksydan\Falconize\Handler\InstallationHandler;
 use Oksydan\Falconize\Handler\UninstallationHandler;
-use Oksydan\Falconize\Helper\TableNameFormatter;
-use Oksydan\Falconize\Module\ModuleManager;
+use Oksydan\Falconize\Service\PrepareConfiguration;
 use Oksydan\Falconize\Yaml\DTO\ParsedResult;
 use Oksydan\Falconize\Yaml\Parser\YamlParser;
 
 class Falconize implements FalconizeInterface
 {
+    public const RETURN_EXCEPTION_ON_EXCEPTION = 0;
+
+    public const RETURN_FALSE_ON_EXCEPTION = 1;
+
     protected Container $container;
 
     protected FalconizeConfigurationInterface $configuration;
@@ -25,32 +32,9 @@ class Falconize implements FalconizeInterface
         $this->configuration = $configuration;
     }
 
-    private function setConnection(): void
-    {
-        /** @var ConnectionManager $connectionManager */
-        $connectionManager = $this->container->get(ConnectionManager::class);
-        $connectionManager->setConnection($this->configuration->getConnection());
-    }
-
-    private function setModule(): void
-    {
-        /** @var ModuleManager $moduleManager */
-        $moduleManager = $this->container->get(ModuleManager::class);
-        $moduleManager->setModule($this->configuration->getModule());
-    }
-
-    private function setDatabasePrefix(): void
-    {
-        /** @var TableNameFormatter $tableNameService */
-        $tableNameService = $this->container->get(TableNameFormatter::class);
-        $tableNameService->setPrefix($this->configuration->getDatabasePrefix());
-    }
-
     private function prepare(): void
     {
-        $this->setConnection();
-        $this->setDatabasePrefix();
-        $this->setModule();
+        $this->container->get(PrepareConfiguration::class)->prepare($this->configuration);
     }
 
     /**
@@ -67,30 +51,47 @@ class Falconize implements FalconizeInterface
         return $parser->parse($configurationFile);
     }
 
-    public function install(): bool
+    /**
+     * @param int $onException
+     * @return bool|void
+     * @throws InstallationException
+     */
+    public function install(int $onException = self::RETURN_EXCEPTION_ON_EXCEPTION)
     {
         $this->prepare();
 
-        $installationHandler = $this->container->get(InstallationHandler::class);
+        try {
+            $installationHandler = $this->container->get(InstallationHandler::class);
 
-        $installationHandler->handle($this->getParsedConfiguration());
-
-        return true;
+            $installationHandler->handle($this->getParsedConfiguration());
+        } catch (YamlFileException|DatabaseQueryException|HookUnregisterException|HookRegisterException $e) {
+            if ($onException === self::RETURN_EXCEPTION_ON_EXCEPTION) {
+                throw new InstallationException($e->getMessage());
+            } elseif ($onException === self::RETURN_FALSE_ON_EXCEPTION) {
+                return false;
+            }
+        }
     }
 
-    public function update(): bool
-    {
-        return $this->install();
-    }
-
-    public function uninstall(): bool
+    /**
+     * @param int $onException
+     * @return bool|void
+     * @throws UninstallationException
+     */
+    public function uninstall(int $onException = self::RETURN_EXCEPTION_ON_EXCEPTION)
     {
         $this->prepare();
 
-        $uninstallationHandler = $this->container->get(UninstallationHandler::class);
+        try {
+            $uninstallationHandler = $this->container->get(UninstallationHandler::class);
 
-        $uninstallationHandler->handle($this->getParsedConfiguration());
-
-        return true;
+            $uninstallationHandler->handle($this->getParsedConfiguration());
+        } catch (YamlFileException|DatabaseQueryException $e) {
+            if ($onException === self::RETURN_EXCEPTION_ON_EXCEPTION) {
+                throw new UninstallationException($e->getMessage());
+            } elseif ($onException === self::RETURN_FALSE_ON_EXCEPTION) {
+                return false;
+            }
+        }
     }
 }

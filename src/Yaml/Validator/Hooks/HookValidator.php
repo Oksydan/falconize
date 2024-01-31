@@ -10,28 +10,26 @@ final class HookValidator implements HookValidatorInterface
 {
     private const VERSION_COMPARE_OPERATORS = ['<', '<=', '>', '>=', '==', '!='];
 
-    public function validate($hook, $hookName): void
+    public function validate($hook): void
     {
-        if ((!is_string($hook) && !is_array($hook)) || empty($hook)) {
+        if ((!is_array($hook)) || empty($hook)) {
             throw YamlFileException::invalidHookValue();
         }
 
-        if (is_array($hook)) {
-            if (!is_string($hookName)) {
-                throw YamlFileException::invalidHookName();
-            }
+        if (!is_string($hook['name'])) {
+            throw YamlFileException::invalidHookName();
+        }
 
-            if (empty($hook['version']) || !is_string($hook['version'])) {
-                throw YamlFileException::invalidHookVersion($hookName);
-            }
+        if (!empty($hook['version']) && !is_string($hook['version'])) {
+            throw YamlFileException::invalidHookVersion($hook['name']);
+        }
 
-            if (empty($hook['version_compare']) || !is_string($hook['version_compare'])) {
-                throw YamlFileException::invalidHookVersionCompare($hookName);
-            }
+        if (!empty($hook['compare_operator']) && !is_string($hook['compare_operator'])) {
+            throw YamlFileException::invalidHookVersionCompare($hook['name']);
+        }
 
-            if (!in_array($hook['version_compare'], self::VERSION_COMPARE_OPERATORS, true)) {
-                throw YamlFileException::invalidHookVersionCompareValue($hookName, self::VERSION_COMPARE_OPERATORS);
-            }
+        if (!empty($hook['compare_operator']) && !in_array($hook['compare_operator'], self::VERSION_COMPARE_OPERATORS, true)) {
+            throw YamlFileException::invalidHookVersionCompareValue($hook['name'], self::VERSION_COMPARE_OPERATORS);
         }
     }
 }

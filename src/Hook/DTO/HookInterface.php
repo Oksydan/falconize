@@ -10,5 +10,5 @@ interface HookInterface
 
     public function getVersion(): ?string;
 
-    public function getVersionCompare(): ?string;
+    public function getCompareOperator(): ?string;
 }

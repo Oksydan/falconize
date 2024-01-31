@@ -13,24 +13,20 @@ class HooksMapper implements HooksMapperInterface
     {
         $hookCollection = new HookCollection();
 
-        foreach ($array as $hookKey => $hook) {
-            if (!is_array($hook)) {
-                $hookCollection->add($this->buildHook($hook, null));
-            } else {
-                $hookCollection->add($this->buildHook($hookKey, $hook));
-            }
+        foreach ($array as $hook) {
+            $hookCollection->add($this->buildHook($hook));
         }
 
         return $hookCollection;
     }
 
-    private function buildHook(string $hookName, ?array $hook): Hook
+    private function buildHook(array $hook): Hook
     {
-        $hookDto = new Hook($hookName);
+        $hookDto = new Hook($hook['name']);
 
         if ($hook) {
             $hookDto->setVersion($hook['version']);
-            $hookDto->setVersionCompare($hook['version_compare']);
+            $hookDto->setCompareOperator($hook['compare_operator']);
         }
 
         return $hookDto;

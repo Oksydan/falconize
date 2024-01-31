@@ -26,8 +26,8 @@ final class HooksValidator implements HooksValidatorInterface
         }
 
         if (!empty($hooks['register'])) {
-            foreach ($hooks['register'] as $name => $hook) {
-                $this->hookValidator->validate($hook, $name);
+            foreach ($hooks['register'] as $hook) {
+                $this->hookValidator->validate($hook);
             }
         }
 
@@ -36,8 +36,8 @@ final class HooksValidator implements HooksValidatorInterface
         }
 
         if (!empty($hooks['unregister'])) {
-            foreach ($hooks['unregister'] as $name => $hook) {
-                $this->hookValidator->validate($hook, $name);
+            foreach ($hooks['unregister'] as $hook) {
+                $this->hookValidator->validate($hook);
             }
         }
     }

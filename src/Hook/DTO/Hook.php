@@ -7,8 +7,8 @@ namespace Oksydan\Falconize\Hook\DTO;
 class Hook implements HookInterface
 {
     private string $name;
-    private ?string $version;
-    private ?string $versionCompare;
+    private ?string $version = null;
+    private ?string $compareOperator = null;
 
     public function __construct(string $name)
     {
@@ -20,9 +20,9 @@ class Hook implements HookInterface
         $this->version = $version;
     }
 
-    public function setVersionCompare(?string $versionCompare): void
+    public function setCompareOperator(?string $compareOperator): void
     {
-        $this->versionCompare = $versionCompare;
+        $this->compareOperator = $compareOperator;
     }
 
     public function getName(): string
@@ -35,8 +35,8 @@ class Hook implements HookInterface
         return $this->version;
     }
 
-    public function getVersionCompare(): ?string
+    public function getCompareOperator(): ?string
     {
-        return $this->versionCompare;
+        return $this->compareOperator;
     }
 }

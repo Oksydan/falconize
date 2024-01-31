@@ -6,13 +6,13 @@ namespace Oksydan\Falconize\Handler;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oksydan\Falconize\Connection\ConnectionManager;
-use Oksydan\Falconize\Database\Builder\SchemaBuilder;
 use Oksydan\Falconize\Database\Collection\DatabaseQueryCollection;
 use Oksydan\Falconize\Database\Comparator\SchemaComparator;
 use Oksydan\Falconize\Database\DTO\DatabaseQuery;
 use Oksydan\Falconize\Database\DTO\Table;
 use Oksydan\Falconize\Database\Executor\DatabaseQueryExecutor;
 use Oksydan\Falconize\Database\Retriever\DatabaseSchemaRetriever;
+use Oksydan\Falconize\Exception\DatabaseQueryException;
 use Oksydan\Falconize\Yaml\DTO\ParsedResult;
 
 class UninstallationHandler implements HandlerInterface
@@ -36,11 +36,21 @@ class UninstallationHandler implements HandlerInterface
         $this->databaseSchemaRetriever = $databaseSchemaRetriever;
     }
 
+    /**
+     * @param ParsedResult $config
+     * @return void
+     * @throws DatabaseQueryException
+     */
     public function handle(ParsedResult $config): void
     {
         $this->uninstallDatabase($config);
     }
 
+    /**
+     * @param ParsedResult $config
+     * @return void
+     * @throws DatabaseQueryException
+     */
     private function uninstallDatabase(ParsedResult $config): void
     {
         $connection = $this->connectionManager->getConnection();
