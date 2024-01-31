@@ -18,9 +18,9 @@ use Oksydan\Falconize\Yaml\Parser\YamlParser;
 
 class Falconize implements FalconizeInterface
 {
-    public const RETURN_EXCEPTION_ON_EXCEPTION = 0;
+    public const THROW_EXCEPTION_ON_FAIL = 0;
 
-    public const RETURN_FALSE_ON_EXCEPTION = 1;
+    public const NOT_THROW_EXCEPTION_ON_FAIL = 1;
 
     protected Container $container;
 
@@ -53,10 +53,10 @@ class Falconize implements FalconizeInterface
 
     /**
      * @param int $onException
-     * @return bool|void
+     * @return bool
      * @throws InstallationException
      */
-    public function install(int $onException = self::RETURN_EXCEPTION_ON_EXCEPTION)
+    public function install(int $onException = self::THROW_EXCEPTION_ON_FAIL): bool
     {
         $this->prepare();
 
@@ -65,20 +65,22 @@ class Falconize implements FalconizeInterface
 
             $installationHandler->handle($this->getParsedConfiguration());
         } catch (YamlFileException|DatabaseQueryException|HookUnregisterException|HookRegisterException $e) {
-            if ($onException === self::RETURN_EXCEPTION_ON_EXCEPTION) {
+            if ($onException === self::THROW_EXCEPTION_ON_FAIL) {
                 throw new InstallationException($e->getMessage());
-            } elseif ($onException === self::RETURN_FALSE_ON_EXCEPTION) {
-                return false;
             }
+
+            return false;
         }
+
+        return true;
     }
 
     /**
      * @param int $onException
-     * @return bool|void
+     * @return bool
      * @throws UninstallationException
      */
-    public function uninstall(int $onException = self::RETURN_EXCEPTION_ON_EXCEPTION)
+    public function uninstall(int $onException = self::THROW_EXCEPTION_ON_FAIL): bool
     {
         $this->prepare();
 
@@ -87,11 +89,13 @@ class Falconize implements FalconizeInterface
 
             $uninstallationHandler->handle($this->getParsedConfiguration());
         } catch (YamlFileException|DatabaseQueryException $e) {
-            if ($onException === self::RETURN_EXCEPTION_ON_EXCEPTION) {
+            if ($onException === self::THROW_EXCEPTION_ON_FAIL) {
                 throw new UninstallationException($e->getMessage());
-            } elseif ($onException === self::RETURN_FALSE_ON_EXCEPTION) {
-                return false;
             }
+
+            return false;
         }
+
+        return true;
     }
 }
