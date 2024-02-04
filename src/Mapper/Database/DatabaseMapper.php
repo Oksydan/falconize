@@ -43,8 +43,10 @@ final class DatabaseMapper implements DatabaseMapperInterface
             }
         }
 
-        foreach ($tableData['constraint_keys'] as $foreignKeyData) {
-            $table->addForeignKeyConstraint($this->buildForeignKeyConstraint($foreignKeyData));
+        if (isset($tableData['constraint_keys'])) {
+            foreach ($tableData['constraint_keys'] as $foreignKeyData) {
+                $table->addForeignKeyConstraint($this->buildForeignKeyConstraint($foreignKeyData));
+            }
         }
 
         return $table;
