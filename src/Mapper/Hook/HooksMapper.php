@@ -24,7 +24,7 @@ class HooksMapper implements HooksMapperInterface
     {
         $hookDto = new Hook($hook['name']);
 
-        if ($hook) {
+        if (isset($hook['version'], $hook['compare_operator'])) {
             $hookDto->setVersion($hook['version']);
             $hookDto->setCompareOperator($hook['compare_operator']);
         }

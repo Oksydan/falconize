@@ -124,6 +124,11 @@ class InstallationHandler implements HandlerInterface
     private function unregisterHooks(ParsedResult $config)
     {
         $hooks = $config->getHookToUnregister();
+
+        if (!$hooks) {
+            return;
+        }
+
         $filteredCollection = $this->getFilteredHooks($hooks);
 
         $this->moduleHookUnregisterExecutor->execute($filteredCollection);
@@ -137,6 +142,11 @@ class InstallationHandler implements HandlerInterface
     private function registerHooks(ParsedResult $config)
     {
         $hooks = $config->getHookToRegister();
+
+        if (!$hooks) {
+            return;
+        }
+
         $filteredCollection = $this->getFilteredHooks($hooks);
 
         $this->moduleHookRegisterExecutor->execute($filteredCollection);
