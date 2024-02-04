@@ -41,4 +41,4 @@ jobs:
         run: composer install
 
       - name: Run PHP-CS-Fixer
-        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no ./src
