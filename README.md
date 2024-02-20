@@ -12,7 +12,7 @@ Falconize is simple yet powerful tool that helps you to improve you development 
 
 ### Step 1 - Create FalconizeConfiguration
 
-First you need to creat FalconizeConfiguration class that implements FalconizeConfigurationInterface. This class will be used to configure Falconize.
+First you need to create FalconizeConfiguration class that implements FalconizeConfigurationInterface. This class will be used to configure Falconize.
 Example FalconizeConfiguration class:
 
 ```php
